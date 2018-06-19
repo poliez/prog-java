@@ -17,16 +17,23 @@ import javafx.stage.Stage;
  */
 public class ToDos extends Application
 {
-    
+
     @Override
     public void start (Stage stage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("ToDosUserInterface.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
+        try
+        {
+            Parent root = FXMLLoader.load(getClass().getResource("ToDosUserInterface.fxml"));
+
+            Scene scene = new Scene(root);
+
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
+        }
     }
 
     /**
@@ -36,5 +43,5 @@ public class ToDos extends Application
     {
         launch(args);
     }
-    
+
 }

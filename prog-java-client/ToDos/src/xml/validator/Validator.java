@@ -31,9 +31,9 @@ public class Validator
             Schema s = sf.newSchema(new StreamSource(new File("../../config.xsd")));
             s.newValidator().validate(new DOMSource(d));
         }
-        catch (IOException | ParserConfigurationException ex)
+        catch (IOException | ParserConfigurationException e)
         {
-            System.out.println(ex.getMessage());
+            System.out.println(e.getMessage());
         }
         catch (SAXException ex)
         {

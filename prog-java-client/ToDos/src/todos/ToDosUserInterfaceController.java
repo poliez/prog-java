@@ -20,14 +20,31 @@ public class ToDosUserInterfaceController implements Initializable
 {
 
     @FXML
-    private Label label;
+    private TableView todos_tv;
 
     @FXML
-    private void handleButtonAction (ActionEvent event)
-    {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+    private PieChart todos_pie;
+
+    @FXML
+    private Button elimina_btn;
+
+    @FXML
+    private Button ricerca_btn;
+
+    @FXML
+    private Button aggiungi_btn;
+
+    @FXML
+    private TextField ora_tf;
+
+    @FXML
+    private DatePicker data_dp;
+
+    @FXML
+    private ChoiceBox compito_cb;
+
+    @FXML
+    private ChoiceBox incaricato_cb;
 
     @Override
     public void initialize (URL url, ResourceBundle rb)
@@ -52,7 +69,7 @@ public class ToDosUserInterfaceController implements Initializable
     {
 
     }
-    
+
     @FXML
     private void mostraDettagli (ActionEvent event)
     {

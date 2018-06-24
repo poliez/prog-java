@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package xml.validator;
+package xml;
 
 import java.io.*;
 import javax.xml.*;
@@ -21,23 +21,28 @@ import org.xml.sax.*;
 public class Validator
 {
 
-    public static void checkConfiguration ()
+    public static boolean validate (File xml, File xsd)
     {
         try
         {
             DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Document d = db.parse(new File("../../config.xml"));
-            Schema s = sf.newSchema(new StreamSource(new File("../../config.xsd")));
+            Document d = db.parse(xml);
+            Schema s = sf.newSchema(new StreamSource(xsd));
+            
             s.newValidator().validate(new DOMSource(d));
+            
+            return true;
         }
         catch (IOException | ParserConfigurationException e)
         {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         catch (SAXException ex)
         {
-            System.out.println("Errore di validazione: " + ex.getMessage());
+            System.err.println("Errore di validazione: " + ex.getMessage());
         }
+        
+        return false;
     }
 }

@@ -6,100 +6,76 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_RIGHT" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todos.ToDosUserInterfaceController">
+<HBox alignment="CENTER" maxHeight="600.0" maxWidth="1200.0" minHeight="600.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: #336699;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todos.ToDosUserInterfaceController">
    <children>
-      <HBox maxHeight="335.0" maxWidth="600.0" minHeight="335.0" minWidth="600.0" prefHeight="335.0" prefWidth="600.0" style="-fx-background-color: #336699;">
+      <VBox alignment="TOP_CENTER" maxHeight="580.0" maxWidth="285.0" minHeight="580.0" minWidth="285.0" prefHeight="580.0" prefWidth="285.0" style="-fx-background-color: #EEEEEE;">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="315.0" maxWidth="285.0" minHeight="315.0" minWidth="285.0" prefHeight="315.0" prefWidth="285.0" style="-fx-background-color: #EEEEEE;">
-               <padding>
+            <ChoiceBox fx:id="incaricato_cb" prefHeight="57.0" prefWidth="680.0">
+               <VBox.margin>
+                  <Insets bottom="2.5" top="2.5" />
+               </VBox.margin>
+            </ChoiceBox>
+            <ChoiceBox fx:id="compito_cb" prefHeight="57.0" prefWidth="483.0">
+               <VBox.margin>
+                  <Insets bottom="2.5" top="2.5" />
+               </VBox.margin>
+            </ChoiceBox>
+            <DatePicker fx:id="data_dp" prefHeight="57.0" prefWidth="477.0" promptText="Data Incarico">
+               <VBox.margin>
+                  <Insets bottom="2.5" top="2.5" />
+               </VBox.margin>
+            </DatePicker>
+            <TextField fx:id="ora_tf" promptText="Ora Incarico">
+               <VBox.margin>
+                  <Insets bottom="2.5" top="2.5" />
+               </VBox.margin>
+            </TextField>
+            <TextArea fx:id="descrizione_ta" prefHeight="200.0" prefWidth="200.0" promptText="Descrizione">
+               <VBox.margin>
+                  <Insets bottom="2.5" top="2.5" />
+               </VBox.margin>
+            </TextArea>
+            <Button fx:id="aggiungi_btn" mnemonicParsing="false" onAction="#aggiungiToDo" prefHeight="57.0" prefWidth="560.0" text="Aggiungi" textAlignment="CENTER">
+               <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <HBox.margin>
+               </VBox.margin>
+            </Button>
+            <Button fx:id="ricerca_btn" mnemonicParsing="false" onAction="#ricercaToDo" prefHeight="57.0" prefWidth="861.0" text="Ricerca" textAlignment="CENTER">
+               <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-               <children>
-                  <TextField fx:id="incaricato_tf" promptText="Incaricato">
-                     <VBox.margin>
-                        <Insets bottom="2.5" top="2.5" />
-                     </VBox.margin>
-                  </TextField>
-                  <TextField fx:id="compito_tf" promptText="Compito">
-                     <VBox.margin>
-                        <Insets bottom="2.5" top="2.5" />
-                     </VBox.margin>
-                  </TextField>
-                  <DatePicker fx:id="data_dp" prefHeight="57.0" prefWidth="477.0" promptText="Data Incarico">
-                     <VBox.margin>
-                        <Insets bottom="2.5" top="2.5" />
-                     </VBox.margin>
-                  </DatePicker>
-                  <TextArea fx:id="descrizione_ta" prefHeight="200.0" prefWidth="200.0" promptText="Descrizione">
-                     <VBox.margin>
-                        <Insets bottom="2.5" top="2.5" />
-                     </VBox.margin>
-                  </TextArea>
-                  <Button fx:id="aggiungi_btn" mnemonicParsing="false" onAction="#aggiungiToDo" prefHeight="57.0" prefWidth="560.0" text="Aggiungi" textAlignment="CENTER">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="ricerca_btn" mnemonicParsing="false" onAction="#ricercaToDo" prefHeight="57.0" prefWidth="861.0" text="Ricerca" textAlignment="CENTER">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <TableView maxHeight="315.0" maxWidth="285.0" minHeight="315.0" minWidth="285.0" prefHeight="315.0" prefWidth="285.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-              </columns>
-               <HBox.margin>
+               </VBox.margin>
+            </Button>
+            <Button fx:id="elimina_btn" mnemonicParsing="false" onAction="#eliminaToDo" prefHeight="57.0" prefWidth="861.0" style="-fx-background-color: #FF2222;" text="Elimina" textAlignment="CENTER" textFill="WHITE">
+               <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </TableView>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding></HBox>
-      <HBox maxHeight="265.0" maxWidth="600.0" minHeight="265.0" minWidth="600.0" prefHeight="265.0" prefWidth="600.0" style="-fx-background-color: #336699;">
-         <children>
-            <PieChart fx:id="todos_pie" maxWidth="285.0" minWidth="285.0" prefWidth="285.0" style="-fx-background-color: #EEEEEE;" title="ToDos di oggi!">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-            </PieChart>
-            <VBox alignment="TOP_CENTER" maxWidth="285.0" minWidth="285.0" prefHeight="200.0" prefWidth="285.0" style="-fx-background-color: #EEEEEE;">
-               <children>
-                  <Button fx:id="dettagli_btn" mnemonicParsing="false" onAction="#mostraDettagli" prefHeight="57.0" prefWidth="560.0" text="Visualizza dettagli" textAlignment="CENTER" visible="false">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#eliminaToDo" prefHeight="57.0" prefWidth="861.0" style="-fx-background-color: #FF2222;" text="Elimina" textAlignment="CENTER" textFill="WHITE" visible="false">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-            </VBox>
+               </VBox.margin>
+            </Button>
+            <PieChart fx:id="todos_pie" style="-fx-background-color: #EEEEEE;" title="ToDos" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
-      </HBox>
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </VBox>
+      <TableView fx:id="todos_tv" maxHeight="580.0" maxWidth="885.0" minHeight="580.0" minWidth="885.0" prefHeight="580.0" prefWidth="885.0">
+         <columns>
+            <TableColumn maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Incaricato" />
+            <TableColumn maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Compito" />
+            <TableColumn maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Data" />
+            <TableColumn maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Ora" />
+            <TableColumn maxWidth="442.5" minWidth="442.5" prefWidth="442.5" resizable="false" text="Descrizione" />
+         </columns>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </TableView>
    </children>
-</VBox>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</HBox>

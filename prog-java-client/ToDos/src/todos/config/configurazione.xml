@@ -1,0 +1,17 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!-- File di configurazione -->
+<Configurazione>
+  <__incaricati>
+    <string>Mamma</string>
+    <string>Papà</string>
+    <string>Elena</string>
+    <string>Paolo</string>
+    <string>Effy</string>
+  </__incaricati>
+  <__compiti>
+    <string>Lavare i piatti</string>
+    <string>Pulire casa</string>
+    <string>Fare i compiti</string>
+    <string>Fare la spesa</string>
+  </__compiti>
+</Configurazione>

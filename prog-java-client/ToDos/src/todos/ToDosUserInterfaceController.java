@@ -5,12 +5,17 @@
  */
 package todos;
 
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
+import utility.*;
+import xml.*;
 
 /**
  *
@@ -20,19 +25,59 @@ public class ToDosUserInterfaceController implements Initializable
 {
 
     @FXML
-    private Label label;
+    private TableView todos_tv;
 
     @FXML
-    private void handleButtonAction (ActionEvent event)
-    {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+    private PieChart todos_pie;
+
+    @FXML
+    private Button elimina_btn;
+
+    @FXML
+    private Button ricerca_btn;
+
+    @FXML
+    private Button aggiungi_btn;
+
+    @FXML
+    private TextField ora_tf;
+
+    @FXML
+    private DatePicker data_dp;
+
+    @FXML
+    private ChoiceBox compito_cb;
+
+    @FXML
+    private ChoiceBox incaricato_cb;
 
     @Override
     public void initialize (URL url, ResourceBundle rb)
     {
-        // TODO
+        File xmlConf
+             = new File("src\\todos\\config\\configurazione.xml");
+
+        File xsdConf
+             = new File("src\\todos\\config\\configurazione.xsd");
+
+        Configurazione conf
+                       = (Configurazione) Loader.loadObjectFromValidatedXML(
+                        xmlConf,
+                        xsdConf,
+                        Configurazione.class
+                );
+
+        incaricato_cb.setItems(
+                FXCollections.observableArrayList(
+                        conf.getIncaricati()
+                )
+        );
+
+        compito_cb.setItems(
+                FXCollections.observableArrayList(
+                        conf.getCompiti()
+                )
+        );
     }
 
     @FXML
@@ -52,7 +97,7 @@ public class ToDosUserInterfaceController implements Initializable
     {
 
     }
-    
+
     @FXML
     private void mostraDettagli (ActionEvent event)
     {

@@ -17,30 +17,19 @@ import javafx.collections.*;
 public class ToDoService
 {
 
-    private static Connection dbConnection;
-
-    private static Statement dbStatement;
-
-    public static boolean Init ()
+    private static Connection dbConnection() throws SQLException
     {
-        try
-        {
-            dbConnection
-            = DriverManager
-                            .getConnection(
-                                    "jdbc:mysql://localhost:3306/todos",
-                                    "root",
-                                    ""
-                            );
+        return DriverManager
+                .getConnection(
+                        "jdbc:mysql://localhost:3306/todos",
+                        "root",
+                        "root"
+                );
+    };
 
-            dbStatement = dbConnection.createStatement();
-
-            return true;
-        }
-        catch (SQLException ex)
-        {
-            return false;
-        }
+    private static Statement dbStatement() throws SQLException
+    {
+        return dbConnection().createStatement();
     }
 
     public static ObservableList<ToDo> caricaToDos ()
@@ -49,9 +38,9 @@ public class ToDoService
 
         try
         {
-            ResultSet rs = dbStatement
+            ResultSet rs = dbStatement()
                     .executeQuery(
-                            "SELECT * FROM todo T WHERE T.eliminato = 0"
+                            "SELECT * FROM todo WHERE eliminato = 0"
                     );
 
             while (rs.next())
@@ -62,10 +51,7 @@ public class ToDoService
                 Date data = rs.getDate("data");
                 String descrizione = rs.getString("descrizione");
 
-                SimpleDateFormat sdf
-                                 = new java.text.SimpleDateFormat("HH:mm");
-
-                String ora = sdf.format(data);
+                String ora = rs.getTime("data").toLocalTime().toString();
 
                 ToDo toAdd = new ToDo(
                         id,
@@ -77,12 +63,15 @@ public class ToDoService
                 );
 
                 retList.add(toAdd);
-
             }
         }
         catch (SQLException e)
         {
             System.err.println(e.getMessage());
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
         }
 
         return retList;
@@ -93,7 +82,7 @@ public class ToDoService
         try
         {
             
-            dbStatement.executeUpdate(
+            dbStatement().executeUpdate(
                   "UPDATE todos"
                 + "SET eliminato = 1"
                 + "WHERE id = " + id
@@ -111,14 +100,15 @@ public class ToDoService
     {
         try
         {
-            dbStatement.executeUpdate(
-                "UPDATE todos "
-              + "SET incaricato = '" + todo.getIncaricato() + "'"
-              + ", compito = '" + todo.getCompito() + "'"
-              + ", data = '" + todo.getDataFormattataPerDatabase() + "'"
-              + ", descrizione = '" + todo.getDescrizione() + "' "
-              + "WHERE id = '" + todo.getId() + "'"
-            );
+            String update =
+                  "UPDATE todos "
+                + "SET incaricato = '" + todo.getIncaricato() + "'"
+                + ", compito = '" + todo.getCompito() + "'"
+                + ", data = '" + todo.getDataFormattataPerDatabase() + "'"
+                + ", descrizione = '" + todo.getDescrizione() + "' "
+                + "WHERE id = '" + todo.getId() + "'";
+            
+            dbStatement().executeUpdate(update);
             
             return true;
         }

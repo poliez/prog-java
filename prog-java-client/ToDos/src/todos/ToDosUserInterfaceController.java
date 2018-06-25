@@ -118,11 +118,34 @@ public class ToDosUserInterfaceController implements Initializable
     private void aggiungiToDo (ActionEvent event)
     {
 
+        ToDo toAdd = new ToDo();
+        
+        String incaricato = incaricato_cb.getSelectionModel().getSelectedItem().toString();
+        String compito = compito_cb.getSelectionModel().getSelectedItem().toString();
+        
+        Date data 
+            = Date.from(
+                Instant.from(
+                    data_dp
+                        .getValue()
+                        .atStartOfDay(
+                            ZoneId.systemDefault()
+                        )
+                )
+            );
+        
+        String ora = ora_tf.getText();
+        String descrizione  = descrizione_ta.getText();
+        
+        toAdd.setIncaricato(incaricato);
+        toAdd.setCompito(compito);
+        toAdd.setData(data);
+        toAdd.setOra(ora);
+        toAdd.setDescrizione(descrizione);
+        
+        ToDoService.inserisciToDo(toAdd);
+        
+        todos_tv.getItems().add(toAdd);
     }
 
-    @FXML
-    private void mostraDettagli (ActionEvent event)
-    {
-
-    }
 }

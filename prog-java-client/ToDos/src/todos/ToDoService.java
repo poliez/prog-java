@@ -118,4 +118,27 @@ public class ToDoService
             return false;
         }
     }
+    
+    public static boolean inserisciToDo (ToDo todo)
+    {
+        try
+        {
+            String insert = 
+                "INSERT INTO todo (incaricato, compito, data, descrizione) "
+              + "VALUES ("
+              + "'"   + todo.getIncaricato() + "'"
+              + ", '" + todo.getCompito()  + "'"
+              + ", '" + todo.getDataFormattataPerDatabase() + "'"
+              + ", '" + todo.getDescrizione() + "' )";
+            
+            dbStatement().execute(insert);
+            
+            return true;
+        }
+        catch (SQLException ex)
+        {
+            System.err.println(ex.getMessage());
+            return false;
+        }
+    }
 }

@@ -7,7 +7,8 @@ package todos;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.*;
+import java.util.*;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,6 +77,14 @@ public class ToDosUserInterfaceController implements Initializable
     @Override
     public void initialize (URL url, ResourceBundle rb)
     {
+        initChoiceBoxes();
+        
+        initTableView();
+        
+    }
+    
+    private void initChoiceBoxes()
+    {
         File xmlConf
              = new File("src\\todos\\config\\configurazione.xml");
 
@@ -102,6 +111,23 @@ public class ToDosUserInterfaceController implements Initializable
         );
     }
 
+    private void initTableView()
+    {
+        incaricato_col.setCellValueFactory(new PropertyValueFactory("incaricato"));
+        
+        compito_col.setCellValueFactory(new PropertyValueFactory("compito"));
+        
+        data_col.setCellValueFactory(new PropertyValueFactory("data"));
+        
+        ora_col.setCellValueFactory(new PropertyValueFactory("ora"));
+        
+        desc_col.setCellValueFactory(new PropertyValueFactory("descrizione"));
+        
+        ObservableList<ToDo> todos = ToDoService.caricaToDos();
+        
+        todos_tv.setItems(todos);
+    }
+    
     @FXML
     private void eliminaToDo (ActionEvent event)
     {

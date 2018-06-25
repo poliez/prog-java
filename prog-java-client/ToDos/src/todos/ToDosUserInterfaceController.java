@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import utility.*;
 import xml.*;
 
@@ -24,6 +25,7 @@ import xml.*;
 public class ToDosUserInterfaceController implements Initializable
 {
 
+    // <editor-fold desc="UI Controls' links">
     @FXML
     private TableView todos_tv;
 
@@ -50,7 +52,27 @@ public class ToDosUserInterfaceController implements Initializable
 
     @FXML
     private ChoiceBox incaricato_cb;
+    
+    @FXML
+    private TextArea descrizione_ta;
+    
+    @FXML
+    private TableColumn incaricato_col;
+    
+    @FXML
+    private TableColumn compito_col;
+    
+    @FXML
+    private TableColumn data_col;
+    
+    @FXML
+    private TableColumn ora_col;
+    
+    @FXML
+    private TableColumn desc_col;
 
+    // </editor-fold>
+    
     @Override
     public void initialize (URL url, ResourceBundle rb)
     {

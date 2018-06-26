@@ -18,6 +18,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element type="xs:byte" name="__giorniPrecedenti"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

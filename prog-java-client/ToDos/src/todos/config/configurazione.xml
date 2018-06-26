@@ -2,6 +2,7 @@
 <!-- File di configurazione -->
 <Configurazione>
   <__incaricati>
+    <string></string>
     <string>Mamma</string>
     <string>Papà</string>
     <string>Elena</string>
@@ -9,9 +10,11 @@
     <string>Effy</string>
   </__incaricati>
   <__compiti>
+    <string></string>
     <string>Lavare i piatti</string>
     <string>Pulire casa</string>
     <string>Fare i compiti</string>
     <string>Fare la spesa</string>
   </__compiti>
+  <__giorniPrecedenti>3</__giorniPrecedenti>
 </Configurazione>

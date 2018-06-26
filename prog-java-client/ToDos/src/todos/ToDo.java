@@ -6,7 +6,6 @@
 package todos;
 
 import java.util.Date;
-import javafx.beans.property.*;
 
 /**
  *
@@ -23,6 +22,7 @@ public class ToDo
     String _descrizione;
 
     // <editor-fold desc="Getters e Setters">
+    
     public int getId ()
     {
         return _id;
@@ -79,12 +79,21 @@ public class ToDo
     }
 
     // </editor-fold>
+    
     public String getDataFormattataPerDatabase ()
     {
-        String[] time = _ora.split(":");
-        _data.setHours(Integer.parseInt(time[0]));
-        _data.setMinutes(Integer.parseInt(time[1]));
-
+        try
+        {
+            String[] time = _ora.split(":");
+            _data.setHours(Integer.parseInt(time[0]));
+            _data.setMinutes(Integer.parseInt(time[1]));
+        }
+        catch (NumberFormatException ex)
+        {
+            _data.setHours(0);
+            _data.setMinutes(0);
+        }
+        
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return sdf.format(_data);

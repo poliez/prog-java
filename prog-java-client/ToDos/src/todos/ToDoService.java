@@ -6,8 +6,9 @@
 package todos;
 
 import java.sql.*;
+import java.sql.Date;
 import java.text.*;
-import java.util.logging.*;
+import java.util.*;
 import javafx.collections.*;
 
 /**
@@ -32,38 +33,71 @@ public class ToDoService
         return dbConnection().createStatement();
     }
 
+    // <editor-fold desc="CRUD">
+    
     public static ObservableList<ToDo> caricaToDos ()
     {
-        ObservableList<ToDo> retList = FXCollections.observableArrayList();
-
         try
         {
             ResultSet rs = dbStatement()
                     .executeQuery(
-                            "SELECT * FROM todo WHERE eliminato = 0"
+                            "SELECT * FROM todo WHERE eliminato = 0 AND data >= DATE(NOW())"
                     );
 
-            while (rs.next())
-            {
-                int id = rs.getInt("id");
-                String incaricato = rs.getString("incaricato");
-                String compito = rs.getString("compito");
-                Date data = rs.getDate("data");
-                String descrizione = rs.getString("descrizione");
-
-                String ora = rs.getTime("data").toLocalTime().toString();
-
-                ToDo toAdd = new ToDo(
-                        id,
-                        incaricato,
-                        compito,
-                        data,
-                        ora,
-                        descrizione
-                );
-
-                retList.add(toAdd);
-            }
+            return getToDos(rs);
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+        
+        return null;
+    }
+    
+    public static ObservableList<ToDo> caricaToDos (String _incaricato, String _compito, java.util.Date _data)
+    {
+        try
+        {
+            String baseQuery = "SELECT * FROM todo WHERE eliminato = 0";
+            
+            // E' necessario usare questo format
+            // _data.getYear(), con data = '2018-01-01', ritorna 118
+            SimpleDateFormat year = new SimpleDateFormat("yyyy");
+            
+            SimpleDateFormat month = new SimpleDateFormat("MM");
+            
+            SimpleDateFormat day = new SimpleDateFormat("d");
+            
+            String condizioneData
+                = (_data != null) 
+                    ? "AND YEAR(data) = '" + year.format(_data)
+                      +"' AND MONTH(data) = '" + month.format(_data).replace("0", "")
+                      +"' AND DAY(data) = '" + day.format(_data) 
+                      +"' " 
+                    : "";
+            
+            String condizioneIncaricato 
+                = (_incaricato != "") ? "AND incaricato = '" + _incaricato +"' " : "";
+            
+            String condizioneCompito
+                = (_compito != "") ? "AND compito = '" + _compito +"' " : "";
+            
+            ResultSet rs = dbStatement()
+                    .executeQuery(
+                        String.join(
+                            " "
+                            , baseQuery
+                            , condizioneData
+                            , condizioneIncaricato
+                            , condizioneCompito
+                        )
+                    );
+            
+            return getToDos(rs);
         }
         catch (SQLException e)
         {
@@ -74,25 +108,27 @@ public class ToDoService
             System.err.println(ex.getMessage());
         }
 
-        return retList;
+        return null;
     }
-
-    public static void eliminaToDo (int id)
+    
+    public static boolean eliminaToDo (int id)
     {
         try
         {
-            
             dbStatement().executeUpdate(
-                  "UPDATE todos"
-                + "SET eliminato = 1"
+                  "UPDATE todo "
+                + "SET eliminato = 1 "
                 + "WHERE id = " + id
             );
-
+            
+            return true;
         }
         catch (SQLException e)
         {
             System.err.println(e.getMessage());
         }
+        
+        return false;
 
     }
     
@@ -140,5 +176,122 @@ public class ToDoService
             System.err.println(ex.getMessage());
             return false;
         }
+    }
+            
+    // </editor-fold>
+    
+    /**
+     * @param giorniPrecedenti Numero di giorni da considerare precedenti al presente 
+     * @return Numero di todo nei giorniPrecedenti per ogni incaricato
+     */
+    public static Map<String, Integer> prelevaStatistiche (int giorniPrecedenti)
+    {
+        try
+        {
+            Map<String, Integer> retMap = new HashMap<String, Integer>();
+            
+            ResultSet rs = dbStatement()
+                    .executeQuery(
+                            "SELECT incaricato, count(*) as conto "
+                            + "FROM todo "
+                            + "WHERE eliminato = 0 "
+                            + "AND data BETWEEN (NOW() - INTERVAL " 
+                            + giorniPrecedenti 
+                            + " DAY) AND NOW() "
+                            + "GROUP BY incaricato"
+                    );
+            
+            while(rs.next())
+            {
+                String incaricato = rs.getString("incaricato");
+                int conto = rs.getInt("conto");
+                
+                retMap.put(incaricato, conto);
+            }
+            
+            return retMap;
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+
+        return null;
+    }
+    
+    public static ToDo prelevaUltimoInserito()
+    {
+        
+        try
+        {
+            ResultSet rs = dbStatement()
+                    .executeQuery(
+                            "SELECT * FROM todo ORDER BY id DESC LIMIT 1"
+                    );
+
+            if(!rs.next())
+                return null;
+            
+            int id = rs.getInt("id");
+            String incaricato = rs.getString("incaricato");
+            String compito = rs.getString("compito");
+            Date data = rs.getDate("data");
+            String descrizione = rs.getString("descrizione");
+            String ora = rs.getTime("data").toLocalTime().toString();
+
+            ToDo retVal = new ToDo(
+                    id,
+                    incaricato,
+                    compito,
+                    data,
+                    ora,
+                    descrizione
+            );
+
+            return retVal;
+        }
+        catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+
+        return null;
+    }
+    
+    private static ObservableList<ToDo> getToDos (ResultSet rs) throws SQLException
+    {
+        ObservableList<ToDo> retList = FXCollections.observableArrayList();
+
+        while (rs.next())
+        {
+            int id = rs.getInt("id");
+            String incaricato = rs.getString("incaricato");
+            String compito = rs.getString("compito");
+            Date data = rs.getDate("data");
+            String descrizione = rs.getString("descrizione");
+
+            String ora = rs.getTime("data").toLocalTime().toString();
+
+            ToDo toAdd = new ToDo(
+                    id,
+                    incaricato,
+                    compito,
+                    data,
+                    ora,
+                    descrizione
+            );
+
+            retList.add(toAdd);
+        }
+
+        return retList;
     }
 }

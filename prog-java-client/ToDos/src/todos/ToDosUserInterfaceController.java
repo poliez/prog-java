@@ -7,13 +7,15 @@ package todos;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.*;
+import java.util.*;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import utility.*;
 import xml.*;
 
@@ -24,6 +26,7 @@ import xml.*;
 public class ToDosUserInterfaceController implements Initializable
 {
 
+    // <editor-fold desc="UI Controls' links">
     @FXML
     private TableView todos_tv;
 
@@ -50,9 +53,119 @@ public class ToDosUserInterfaceController implements Initializable
 
     @FXML
     private ChoiceBox incaricato_cb;
+    
+    @FXML
+    private TextArea descrizione_ta;
+    
+    @FXML
+    private TableColumn incaricato_col;
+    
+    @FXML
+    private TableColumn compito_col;
+    
+    @FXML
+    private TableColumn data_col;
+    
+    @FXML
+    private TableColumn ora_col;
+    
+    @FXML
+    private TableColumn desc_col;
 
+    // </editor-fold>
+    
+    // <editor-fold desc="'Properties'">
+    
+    private String incaricato()
+    {
+        try
+        {
+            String incaricato 
+                = incaricato_cb
+                    .getSelectionModel()
+                        .getSelectedItem()
+                            .toString();
+        
+            return incaricato;
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
+    
+    private String compito()
+    {
+        try
+        {
+            String compito 
+                = compito_cb
+                    .getSelectionModel()
+                        .getSelectedItem()
+                            .toString();
+        
+            return compito;
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
+    
+    private Date data()
+    {
+        try
+        {
+            Date data 
+                = Date.from(
+                    Instant.from(
+                        data_dp
+                            .getValue()
+                            .atStartOfDay(
+                                ZoneId.systemDefault()
+                            )
+                    )
+                );
+
+            return data;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+    
+    private String ora()
+    {
+        String ora = ora_tf.getText();
+        
+        return ora;
+    }
+    
+    private String descrizione()
+    {
+        String descrizione  = descrizione_ta.getText();
+        
+        return descrizione;
+    }
+    
+    
+    // </editor-fold>
+    
+    private Configurazione _conf;
+    
+    ObservableList<ToDo> _todos;
+    
     @Override
     public void initialize (URL url, ResourceBundle rb)
+    {
+        caricaConfigurazione();
+        
+        initTableView();
+        
+    }
+    
+    private void caricaConfigurazione()
     {
         File xmlConf
              = new File("src\\todos\\config\\configurazione.xml");
@@ -60,47 +173,129 @@ public class ToDosUserInterfaceController implements Initializable
         File xsdConf
              = new File("src\\todos\\config\\configurazione.xsd");
 
-        Configurazione conf
-                       = (Configurazione) Loader.loadObjectFromValidatedXML(
-                        xmlConf,
-                        xsdConf,
-                        Configurazione.class
-                );
+        _conf
+            = (Configurazione) Loader
+                                    .loadObjectFromValidatedXML(
+                                        xmlConf,
+                                        xsdConf,
+                                        Configurazione.class
+                                    );
 
+        inizializzaChoiceBox();
+        
+        aggiornaGrafico();
+    }
+
+    private void inizializzaChoiceBox()
+    {
         incaricato_cb.setItems(
-                FXCollections.observableArrayList(
-                        conf.getIncaricati()
-                )
+            FXCollections.observableArrayList(
+                    _conf.getIncaricati()
+            )
         );
 
         compito_cb.setItems(
-                FXCollections.observableArrayList(
-                        conf.getCompiti()
-                )
+            FXCollections.observableArrayList(
+                    _conf.getCompiti()
+            )
         );
     }
-
+    
+    private void initTableView()
+    {
+        incaricato_col.setCellValueFactory(new PropertyValueFactory("incaricato"));
+        
+        compito_col.setCellValueFactory(new PropertyValueFactory("compito"));
+        
+        data_col.setCellValueFactory(new PropertyValueFactory("data"));
+        
+        ora_col.setCellValueFactory(new PropertyValueFactory("ora"));
+        
+        desc_col.setCellValueFactory(new PropertyValueFactory("descrizione"));
+        
+        _todos = ToDoService.caricaToDos();
+        
+        todos_tv.setItems(_todos);
+    }
+    
     @FXML
     private void eliminaToDo (ActionEvent event)
     {
-
+        int index = todos_tv.getSelectionModel().getFocusedIndex();
+        
+        ToDo toRemove = (ToDo) _todos.get(index);
+        
+        boolean check = ToDoService.eliminaToDo(toRemove.getId());
+        
+        if(check)
+            _todos.remove(toRemove);
+        
+        aggiornaGrafico();
     }
 
     @FXML
     private void ricercaToDo (ActionEvent event)
-    {
-
+    {   
+        _todos 
+            = ToDoService
+                .caricaToDos(
+                    incaricato(),
+                    compito(),
+                    data()
+                );
+        
+        todos_tv.setItems(_todos);
     }
 
     @FXML
     private void aggiungiToDo (ActionEvent event)
     {
 
+        ToDo toAdd = new ToDo();
+        
+        toAdd.setIncaricato(incaricato());
+        toAdd.setCompito(compito());
+        toAdd.setData(data());
+        toAdd.setOra(ora());
+        toAdd.setDescrizione(descrizione());
+        
+        ToDoService.inserisciToDo(toAdd);
+        
+        // Prelevo il ToDo appena inserito dal DB per avere l'id
+        todos_tv
+            .getItems()
+                .add(
+                    ToDoService
+                        .prelevaUltimoInserito()
+                );
+        
+        aggiornaGrafico();
     }
-
-    @FXML
-    private void mostraDettagli (ActionEvent event)
+    
+    private void aggiornaGrafico()
     {
 
+        ObservableList<PieChart.Data> pieChartData 
+            = FXCollections.observableArrayList();
+
+        Map<String, Integer> stat 
+            = ToDoService.prelevaStatistiche(_conf.getGiorniPrecedenti());
+
+        Iterator<Integer> iterator = stat.values().iterator();
+
+        int count = 0;
+
+        while(iterator.hasNext())
+            count += iterator.next();
+
+        for(String incaricato : stat.keySet())
+        {   
+            pieChartData.add(
+                new PieChart.Data(incaricato, stat.get(incaricato))
+            );
+        }
+
+        todos_pie.setData(pieChartData);
     }
+
 }

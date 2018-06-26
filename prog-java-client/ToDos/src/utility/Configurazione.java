@@ -17,11 +17,14 @@ public class Configurazione implements Serializable
     String[] _incaricati;
 
     String[] _compiti;
+    
+    int _giorniPrecedenti;
 
-    public Configurazione(String[] incaricati, String[] compiti)
+    public Configurazione(String[] incaricati, String[] compiti, int giorniPrecedenti)
     {
         _incaricati = incaricati;
         _compiti = compiti;
+        _giorniPrecedenti = giorniPrecedenti;
     }
     
     public String[] getIncaricati ()
@@ -32,5 +35,10 @@ public class Configurazione implements Serializable
     public String[] getCompiti ()
     {
         return _compiti;
+    }
+    
+    public int getGiorniPrecedenti ()
+    {
+        return _giorniPrecedenti;
     }
 }

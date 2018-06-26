@@ -61,11 +61,11 @@
       </VBox>
       <TableView fx:id="todos_tv" maxHeight="580.0" maxWidth="885.0" minHeight="580.0" minWidth="885.0" prefHeight="580.0" prefWidth="885.0">
          <columns>
-            <TableColumn maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Incaricato" />
-            <TableColumn maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Compito" />
-            <TableColumn maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Data" />
-            <TableColumn maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Ora" />
-            <TableColumn maxWidth="442.5" minWidth="442.5" prefWidth="442.5" resizable="false" text="Descrizione" />
+            <TableColumn fx:id="incaricato_col" maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Incaricato" />
+            <TableColumn fx:id="compito_col" maxWidth="132.75" minWidth="132.75" prefWidth="132.75" resizable="false" text="Compito" />
+            <TableColumn fx:id="data_col" maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Data" />
+            <TableColumn fx:id="ora_col" maxWidth="88.5" minWidth="88.5" prefWidth="88.5" resizable="false" text="Ora" />
+            <TableColumn fx:id="desc_col" maxWidth="442.5" minWidth="442.5" prefWidth="442.5" resizable="false" text="Descrizione" />
          </columns>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

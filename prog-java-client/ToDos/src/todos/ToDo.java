@@ -6,7 +6,6 @@
 package todos;
 
 import java.util.Date;
-import javafx.beans.property.*;
 
 /**
  *
@@ -15,35 +14,36 @@ import javafx.beans.property.*;
 public class ToDo
 {
 
-    int _id;
-    SimpleStringProperty _incaricato;
-    SimpleStringProperty _compito;
+    int _id = 0;
+    String _incaricato;
+    String _compito;
     Date _data;
-    SimpleStringProperty _ora;
-    SimpleStringProperty _descrizione;
+    String _ora;
+    String _descrizione;
 
     // <editor-fold desc="Getters e Setters">
+    
     public int getId ()
     {
         return _id;
     }
 
-    public SimpleStringProperty getIncaricato ()
+    public String getIncaricato ()
     {
         return _incaricato;
     }
 
-    public void setIncaricato (SimpleStringProperty incaricato)
+    public void setIncaricato (String incaricato)
     {
         this._incaricato = incaricato;
     }
 
-    public SimpleStringProperty getCompito ()
+    public String getCompito ()
     {
         return _compito;
     }
 
-    public void setCompito (SimpleStringProperty compito)
+    public void setCompito (String compito)
     {
         this._compito = compito;
     }
@@ -58,38 +58,52 @@ public class ToDo
         this._data = data;
     }
 
-    public SimpleStringProperty getOra ()
+    public String getOra ()
     {
         return _ora;
     }
 
-    public void setOra (SimpleStringProperty ora)
+    public void setOra (String ora)
     {
         this._ora = ora;
     }
 
-    public SimpleStringProperty getDescrizione ()
+    public String getDescrizione ()
     {
         return _descrizione;
     }
 
-    public void setDescrizione (SimpleStringProperty descrizione)
+    public void setDescrizione (String descrizione)
     {
         this._descrizione = descrizione;
     }
 
     // </editor-fold>
+    
     public String getDataFormattataPerDatabase ()
     {
-        String[] time = _ora.getValue().split(":");
-        _data.setHours(Integer.parseInt(time[0]));
-        _data.setMinutes(Integer.parseInt(time[1]));
-
+        try
+        {
+            String[] time = _ora.split(":");
+            _data.setHours(Integer.parseInt(time[0]));
+            _data.setMinutes(Integer.parseInt(time[1]));
+        }
+        catch (NumberFormatException ex)
+        {
+            _data.setHours(0);
+            _data.setMinutes(0);
+        }
+        
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return sdf.format(_data);
     }
 
+    ToDo ()
+    {
+        this(0, "", "", null, "", "");
+    }
+    
     public ToDo (int id,
                  String incaricato,
                  String compito,
@@ -98,11 +112,11 @@ public class ToDo
                  String descrizione)
     {
         _id = id;
-        _incaricato = new SimpleStringProperty(incaricato);
-        _compito = new SimpleStringProperty(compito);
+        _incaricato = incaricato;
+        _compito = compito;
         _data = data;
-        _ora = new SimpleStringProperty(ora);
-        _descrizione = new SimpleStringProperty(descrizione);
+        _ora = ora;
+        _descrizione = descrizione;
     }
 
 }

@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import serializzazione.*;
 import utility.*;
 import xml.*;
 
@@ -26,6 +27,8 @@ import xml.*;
 public class ToDosUserInterfaceController implements Initializable
 {
 
+    private final String _inputCachePath = "input.bin";
+    
     // <editor-fold desc="UI Controls' links">
     @FXML
     private TableView todos_tv;
@@ -161,8 +164,9 @@ public class ToDosUserInterfaceController implements Initializable
     {
         caricaConfigurazione();
         
-        initTableView();
+        caricaCacheInput();
         
+        initTableView();
     }
     
     private void caricaConfigurazione()
@@ -199,6 +203,35 @@ public class ToDosUserInterfaceController implements Initializable
                     _conf.getCompiti()
             )
         );
+    }
+    
+    private void caricaCacheInput()
+    {
+        ToDo prevInput = (ToDo) FileManager.leggiBin(_inputCachePath);
+        
+        incaricato_cb.setValue(prevInput.getIncaricato());
+        compito_cb.setValue(prevInput.getCompito());
+        
+        data_dp
+            .setValue(
+                prevInput
+                    .getData()
+                    .toInstant()
+                    .atZone(
+                        ZoneId.systemDefault()
+                    ).toLocalDate());
+        
+        ora_tf.setText(prevInput.getOra());
+        descrizione_ta.setText(prevInput.getDescrizione());
+    }
+    
+    public void scriviCacheInput()
+    {
+        FileManager
+            .salvaBin(
+                getToDoFromInput(), 
+                _inputCachePath
+            );
     }
     
     private void initTableView()
@@ -251,13 +284,7 @@ public class ToDosUserInterfaceController implements Initializable
     private void aggiungiToDo (ActionEvent event)
     {
 
-        ToDo toAdd = new ToDo();
-        
-        toAdd.setIncaricato(incaricato());
-        toAdd.setCompito(compito());
-        toAdd.setData(data());
-        toAdd.setOra(ora());
-        toAdd.setDescrizione(descrizione());
+        ToDo toAdd = getToDoFromInput();
         
         ToDoService.inserisciToDo(toAdd);
         
@@ -270,6 +297,19 @@ public class ToDosUserInterfaceController implements Initializable
                 );
         
         aggiornaGrafico();
+    }
+    
+    private ToDo getToDoFromInput()
+    {
+        ToDo retVal = new ToDo();
+        
+        retVal.setIncaricato(incaricato());
+        retVal.setCompito(compito());
+        retVal.setData(data());
+        retVal.setOra(ora());
+        retVal.setDescrizione(descrizione());
+        
+        return retVal;
     }
     
     private void aggiornaGrafico()
@@ -297,5 +337,4 @@ public class ToDosUserInterfaceController implements Initializable
 
         todos_pie.setData(pieChartData);
     }
-
 }

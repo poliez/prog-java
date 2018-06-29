@@ -23,13 +23,21 @@ public class ToDos extends Application
     {
         try
         {
-            Parent root = FXMLLoader.load(getClass().getResource("ToDosUserInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            
+            Parent root = loader.load(getClass().getResource("ToDosUserInterface.fxml").openStream());
 
             Scene scene = new Scene(root);
+            
+            stage.setOnCloseRequest(evt -> {
+                ((ToDosUserInterfaceController) loader.getController()).scriviCacheInput();
+                evt.consume();
+            });
             
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
+            
         }
         catch (Exception ex)
         {

@@ -30,8 +30,8 @@ public class ToDos extends Application
             Scene scene = new Scene(root);
             
             stage.setOnCloseRequest(evt -> {
-                ((ToDosUserInterfaceController) loader.getController()).scriviCacheInput();
-                evt.consume();
+                ((ToDosUserInterfaceController) loader.getController())
+                    .scriviCacheInput();
             });
             
             stage.setResizable(false);

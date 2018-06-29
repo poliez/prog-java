@@ -207,22 +207,31 @@ public class ToDosUserInterfaceController implements Initializable
     
     private void caricaCacheInput()
     {
-        ToDo prevInput = (ToDo) FileManager.leggiBin(_inputCachePath);
-        
-        incaricato_cb.setValue(prevInput.getIncaricato());
-        compito_cb.setValue(prevInput.getCompito());
-        
-        data_dp
-            .setValue(
-                prevInput
-                    .getData()
-                    .toInstant()
-                    .atZone(
-                        ZoneId.systemDefault()
-                    ).toLocalDate());
-        
-        ora_tf.setText(prevInput.getOra());
-        descrizione_ta.setText(prevInput.getDescrizione());
+        try
+        {
+            ToDo prevInput = (ToDo) FileManager.leggiBin(_inputCachePath);
+
+            incaricato_cb.setValue(prevInput.getIncaricato());
+            compito_cb.setValue(prevInput.getCompito());
+
+            Date data = prevInput.getData();
+            
+            if(data != null)
+                data_dp
+                    .setValue(
+                        data
+                            .toInstant()
+                            .atZone(
+                                ZoneId.systemDefault()
+                            ).toLocalDate());
+
+            ora_tf.setText(prevInput.getOra());
+            descrizione_ta.setText(prevInput.getDescrizione());
+        }
+        catch (Exception ex)
+        {
+            System.err.print(ex.getMessage());
+        }
     }
     
     public void scriviCacheInput()

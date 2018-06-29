@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Paolo
  */
-public class ToDo
+public class ToDo implements java.io.Serializable
 {
 
     int _id = 0;

@@ -7,8 +7,6 @@ package xml;
 
 import java.io.*;
 import com.thoughtworks.xstream.*;
-import java.util.logging.*;
-import utility.*;
 
 /**
  *
@@ -55,7 +53,7 @@ public class Loader
         }
         catch (ClassNotFoundException ex)
         {
-            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         
         return null;        

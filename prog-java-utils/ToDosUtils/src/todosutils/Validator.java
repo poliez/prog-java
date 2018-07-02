@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package xml;
+package todosutils;
 
 import java.io.*;
 import javax.xml.*;
@@ -35,6 +35,29 @@ public class Validator
             return true;
         }
         catch (IOException | ParserConfigurationException e)
+        {
+            System.err.println(e.getMessage());
+        }
+        catch (SAXException ex)
+        {
+            System.err.println("Errore di validazione: " + ex.getMessage());
+        }
+        
+        return false;
+    }
+    
+    public static boolean validate (String xml, File xsd)
+    {
+        try
+        {
+            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema s = sf.newSchema(new StreamSource(xsd));
+            
+            s.newValidator().validate(new StreamSource(new StringReader(xml)));
+            
+            return true;
+        }
+        catch (IOException e)
         {
             System.err.println(e.getMessage());
         }

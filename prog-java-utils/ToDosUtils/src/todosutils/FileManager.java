@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package serializzazione;
+package todosutils;
 
 import java.io.*;
 
@@ -54,4 +54,23 @@ public class FileManager
         return null;
     }
 
+    public static void salvaTxt (Object obj, String txtFilePath)
+    {
+        try
+        (
+            ObjectOutputStream out
+                = new ObjectOutputStream(
+                    new FileOutputStream(
+                            txtFilePath
+                    )
+                );
+        )
+        {
+            out.writeObject(obj);
+        }
+        catch (IOException ex)
+        {
+            System.err.print(ex.getMessage());
+        }
+    }
 }

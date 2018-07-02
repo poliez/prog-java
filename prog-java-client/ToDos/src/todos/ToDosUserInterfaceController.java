@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package todos;
 
+import com.thoughtworks.xstream.*;
+import todos.config.Configurazione;
+import todosutils.*;
 import java.io.*;
-import java.net.URL;
+import java.net.*;
 import java.time.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,9 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
-import serializzazione.*;
-import utility.*;
-import xml.*;
 
 /**
  *
@@ -178,7 +174,7 @@ public class ToDosUserInterfaceController implements Initializable
              = new File("src\\todos\\config\\configurazione.xsd");
 
         _conf
-            = (Configurazione) Loader
+            = (Configurazione) XMLManager
                                     .loadObjectFromValidatedXML(
                                         xmlConf,
                                         xsdConf,
@@ -273,6 +269,8 @@ public class ToDosUserInterfaceController implements Initializable
             _todos.remove(toRemove);
         
         aggiornaGrafico();
+
+        ToDoService.inviaEvento("Elimina ToDo") ;
     }
 
     @FXML
@@ -287,6 +285,8 @@ public class ToDosUserInterfaceController implements Initializable
                 );
         
         todos_tv.setItems(_todos);
+        
+        ToDoService.inviaEvento("Aggiungi ToDo");
     }
 
     @FXML
@@ -306,6 +306,8 @@ public class ToDosUserInterfaceController implements Initializable
                 );
         
         aggiornaGrafico();
+        
+        ToDoService.inviaEvento("Aggiungi ToDo");
     }
     
     private ToDo getToDoFromInput()

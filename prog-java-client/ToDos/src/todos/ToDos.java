@@ -23,6 +23,8 @@ public class ToDos extends Application
     {
         try
         {
+            ToDoService.inviaEvento("Avvio");
+            
             FXMLLoader loader = new FXMLLoader();
             
             Parent root = loader.load(getClass().getResource("ToDosUserInterface.fxml").openStream());
@@ -32,6 +34,8 @@ public class ToDos extends Application
             stage.setOnCloseRequest(evt -> {
                 ((ToDosUserInterfaceController) loader.getController())
                     .scriviCacheInput();
+                
+                ToDoService.inviaEvento("Chiusura");
             });
             
             stage.setResizable(false);

@@ -1,13 +1,11 @@
 package todos;
 
-import com.thoughtworks.xstream.*;
 import todos.config.Configurazione;
 import todosutils.*;
 import java.io.*;
 import java.net.*;
 import java.time.*;
 import java.util.*;
-import java.util.logging.*;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +16,10 @@ import javafx.scene.control.cell.*;
 
 /**
  *
+ * Consente l'interazione tra front-end e middleware.
+ * Gestisce gli eventi della UI e comunica con il back-end tramite il middleware,
+ * ovvero la classe ToDoService.
+ * 
  * @author Paolo
  */
 public class ToDosUserInterfaceController implements Initializable
@@ -115,6 +117,8 @@ public class ToDosUserInterfaceController implements Initializable
     {
         try
         {
+            // Il valore contenuto in un DatePicker JavaFX è un LocalDate, è
+            // necessaria una conversione.
             Date data 
                 = Date.from(
                     Instant.from(
@@ -168,10 +172,10 @@ public class ToDosUserInterfaceController implements Initializable
     private void caricaConfigurazione()
     {
         File xmlConf
-             = new File("src\\todos\\config\\configurazione.xml");
+             = new File("configurazione.xml");
 
         File xsdConf
-             = new File("src\\todos\\config\\configurazione.xsd");
+             = new File("configurazione.xsd");
 
         _conf
             = (Configurazione) XMLManager
@@ -205,7 +209,7 @@ public class ToDosUserInterfaceController implements Initializable
     {
         try
         {
-            ToDo prevInput = (ToDo) FileManager.leggiBin(_inputCachePath);
+            ToDo prevInput = (ToDo) BinFileManager.leggiBin(_inputCachePath);
 
             incaricato_cb.setValue(prevInput.getIncaricato());
             compito_cb.setValue(prevInput.getCompito());
@@ -232,7 +236,7 @@ public class ToDosUserInterfaceController implements Initializable
     
     public void scriviCacheInput()
     {
-        FileManager
+        BinFileManager
             .salvaBin(
                 getToDoFromInput(), 
                 _inputCachePath
@@ -331,13 +335,6 @@ public class ToDosUserInterfaceController implements Initializable
 
         Map<String, Integer> stat 
             = ToDoService.prelevaStatistiche(_conf.getGiorniPrecedenti());
-
-        Iterator<Integer> iterator = stat.values().iterator();
-
-        int count = 0;
-
-        while(iterator.hasNext())
-            count += iterator.next();
 
         for(String incaricato : stat.keySet())
         {   

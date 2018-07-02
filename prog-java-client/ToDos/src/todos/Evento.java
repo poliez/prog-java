@@ -5,20 +5,19 @@
  */
 package todos;
 
-import java.time.*;
-
+import java.util.Date;
 /**
- *
+ * Classe da serializzare XML per inviare eventi da loggare al server.
  * @author Paolo
  */
 public class Evento
 {
     String nomeApplicazione; 
     String indirizzoIP; 
-    LocalDate data; 
+    Date data; 
     String nomeEvento;
     
-    public Evento(String nomeApplicazione, String indirizzoIP, LocalDate data, String nomeEvento)
+    public Evento(String nomeApplicazione, String indirizzoIP, Date data, String nomeEvento)
     {
         this.nomeApplicazione = nomeApplicazione;
         this.indirizzoIP = indirizzoIP;

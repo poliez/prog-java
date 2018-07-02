@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package todos;
 
 import com.thoughtworks.xstream.*;
@@ -18,6 +13,11 @@ import todosutils.*;
 
 /**
  *
+ * ToDoService implementa le CRUD su DB per la classe ToDo e si occupa di tutte
+ * le interazioni con l'esterno (dal punto di vista del client di ToDos):
+ * Implementa quindi il metodo per inviare i log al server e tutti i metodi che
+ * interagiscono con la base di dati.
+ * 
  * @author Paolo
  */
 public class ToDoService
@@ -63,13 +63,13 @@ public class ToDoService
         return null;
     }
     
-    public static ObservableList<ToDo> caricaToDos (String _incaricato, String _compito, java.util.Date _data)
+    public static ObservableList<ToDo> caricaToDos (String incaricato, String compito, java.util.Date data)
     {
         try
         {
             String baseQuery = "SELECT * FROM todo WHERE eliminato = 0";
             
-            // E' necessario usare questo format
+            // E' necessario usare questo format, in quanto
             // _data.getYear(), con data = '2018-01-01', ritorna 118
             SimpleDateFormat year = new SimpleDateFormat("yyyy");
             
@@ -78,18 +78,18 @@ public class ToDoService
             SimpleDateFormat day = new SimpleDateFormat("d");
             
             String condizioneData
-                = (_data != null) 
-                    ? "AND YEAR(data) = '" + year.format(_data)
-                      +"' AND MONTH(data) = '" + month.format(_data).replace("0", "")
-                      +"' AND DAY(data) = '" + day.format(_data) 
+                = (data != null) 
+                    ? "AND YEAR(data) = '" + year.format(data)
+                      +"' AND MONTH(data) = '" + month.format(data).replace("0", "")
+                      +"' AND DAY(data) = '" + day.format(data) 
                       +"' " 
                     : "";
             
             String condizioneIncaricato 
-                = (_incaricato != "") ? "AND incaricato = '" + _incaricato +"' " : "";
+                = (incaricato != "") ? "AND incaricato = '" + incaricato +"' " : "";
             
             String condizioneCompito
-                = (_compito != "") ? "AND compito = '" + _compito +"' " : "";
+                = (compito != "") ? "AND compito = '" + compito +"' " : "";
             
             ResultSet rs = dbStatement()
                     .executeQuery(
@@ -193,7 +193,7 @@ public class ToDoService
     {
         try
         {
-            Map<String, Integer> retMap = new HashMap<String, Integer>();
+            Map<String, Integer> retMap = new HashMap<>();
             
             ResultSet rs = dbStatement()
                     .executeQuery(
@@ -312,7 +312,7 @@ public class ToDoService
                 = new Evento(
                     "ToDos",
                     InetAddress.getLocalHost().toString(), 
-                    LocalDate.now(), 
+                    Date.from(Instant.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()))), 
                     evt
                 );
             

@@ -2,25 +2,26 @@ import java.io.*;
 import java.net.*;
 import todosutils.*;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * 
  * @author Paolo
  */
 public class ToDoServerThread extends Thread
 {
 
     Socket _soc;
+    
+    File _xsdFile;
+    File _txtLogFile;
 
-    public ToDoServerThread (String name, Socket soc)
+    public ToDoServerThread (String name, Socket soc, File xsdFile, File txtLogFile)
     {
         super(name);
 
         _soc = soc;
+        
+        _xsdFile = xsdFile;
+        _txtLogFile = txtLogFile;
     }
 
     @Override
@@ -33,16 +34,10 @@ public class ToDoServerThread extends Thread
                     _soc.getInputStream()
                 );
         )
-        {
-            File xsdFile
-                = new File("src\\evento.xsd");
-            
-            File txtFile
-                = new File("log.txt");
-            
+        {   
             String xml = oin.readUTF();
             
-            XMLManager.appendValidetedXMLToTXT(xml, xsdFile, txtFile);
+            XMLManager.appendValidetedXMLToTXT(xml, _xsdFile, _txtLogFile);
         }
         catch (Exception ex)
         {

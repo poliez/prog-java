@@ -5,6 +5,7 @@
  */
 package todos;
 
+import java.io.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,6 +33,7 @@ public class ToDos extends Application
             Scene scene = new Scene(root);
             
             stage.setOnCloseRequest(evt -> {
+                
                 ((ToDosUserInterfaceController) loader.getController())
                     .scriviCacheInput();
                 
@@ -43,7 +45,7 @@ public class ToDos extends Application
             stage.show();
             
         }
-        catch (Exception ex)
+        catch (IOException ex)
         {
             System.err.print(ex.getMessage());
         }

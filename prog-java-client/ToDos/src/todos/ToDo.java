@@ -8,7 +8,7 @@ package todos;
 import java.util.Date;
 
 /**
- *
+ * Classe base rappresentante l'oggetto fondamentale dell'applicazione, il ToDo.
  * @author Paolo
  */
 public class ToDo implements java.io.Serializable
@@ -80,6 +80,13 @@ public class ToDo implements java.io.Serializable
 
     // </editor-fold>
     
+    /**
+     * Metodo utile ai fini della memorizzazione su DB del ToDo.
+     * Per ottimizzare lo spazio occupato dalle istanze della relazione 'todo'
+     * si è scelto di memorizzare data e ora nello stesso attributo. 
+     * Lato client è stato preferito mantenerli separati per favorire la scrittura
+     * del codice.
+     */
     public String getDataFormattataPerDatabase ()
     {
         try
@@ -94,6 +101,7 @@ public class ToDo implements java.io.Serializable
             _data.setMinutes(0);
         }
         
+        // Scegliamo un formato adatto alla memorizzazione su DB MySQL
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return sdf.format(_data);

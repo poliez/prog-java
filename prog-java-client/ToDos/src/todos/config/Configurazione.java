@@ -9,6 +9,8 @@ import java.io.*;
 
 /**
  *
+ * Modello dei dati salvati/letti su/da file binario di configurazione.
+ * 
  * @author Paolo
  */
 public class Configurazione implements Serializable

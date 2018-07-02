@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package todosutils;
 
 import java.io.*;
@@ -14,11 +9,7 @@ import javax.xml.validation.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
-/**
- *
- * @author Paolo
- */
-public class Validator
+public class XMLValidator
 {
 
     public static boolean validate (File xml, File xsd)

@@ -1,12 +1,5 @@
-
 import java.io.*;
 import java.net.*;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -19,13 +12,21 @@ public class ToDosLogServer
     {
         int n = 0;
         
+        File xsdFile 
+            = new File("evento.xsd");
+            
+        File txtFile
+            = new File("log.txt");
+        
         try (ServerSocket servs = new ServerSocket(8080, 7))
         {
             while (true)
             {
                 new ToDoServerThread(
                     "ToDoServerThread"+ n++, 
-                    servs.accept()
+                    servs.accept(),
+                    xsdFile,
+                    txtFile
                 ).start();
             }
         }

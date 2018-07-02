@@ -5,11 +5,16 @@
  */
 package todos;
 
+import com.thoughtworks.xstream.*;
+import java.io.*;
+import java.net.*;
 import java.sql.*;
 import java.sql.Date;
 import java.text.*;
+import java.time.*;
 import java.util.*;
 import javafx.collections.*;
+import todosutils.*;
 
 /**
  *
@@ -293,5 +298,36 @@ public class ToDoService
         }
 
         return retList;
+    }
+    
+    public static void inviaEvento(String evt)
+    {
+        try 
+        (
+            Socket s = new Socket("localhost", 8080);
+            ObjectOutputStream oout = new ObjectOutputStream(s.getOutputStream());
+        )
+        {
+            Evento toSend   
+                = new Evento(
+                    "ToDos",
+                    InetAddress.getLocalHost().toString(), 
+                    LocalDate.now(), 
+                    evt
+                );
+            
+            String xml 
+                = XMLManager
+                    .toPrettyString(
+                        new XStream().toXML(toSend), 
+                        4
+                    );
+            
+            oout.writeUTF(xml);
+        }
+        catch (Exception ex)
+        {
+            System.err.print(ex.getMessage());
+        }
     }
 }

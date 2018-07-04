@@ -2,7 +2,7 @@ package todosutils;
 
 import java.io.*;
 
-public class BinFileManager
+public class GestoreFileBIN
 {
 
     public static void salvaBin (Serializable obj, String binFilePath)

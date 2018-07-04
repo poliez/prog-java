@@ -24,7 +24,7 @@ public class ToDos extends Application
     {
         try
         {
-            ToDoService.inviaEvento("Avvio");
+            ArchivioToDos.inviaEvento("Avvio");
             
             FXMLLoader loader = new FXMLLoader();
             
@@ -37,7 +37,7 @@ public class ToDos extends Application
                 ((ToDosUserInterfaceController) loader.getController())
                     .scriviCacheInput();
                 
-                ToDoService.inviaEvento("Chiusura");
+                ArchivioToDos.inviaEvento("Chiusura");
             });
             
             stage.setResizable(false);

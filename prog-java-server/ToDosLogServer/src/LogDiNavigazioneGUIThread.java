@@ -37,7 +37,7 @@ public class ToDoServerThread extends Thread
         {   
             String xml = oin.readUTF();
             
-            XMLManager.appendValidetedXMLToTXT(xml, _xsdFile, _txtLogFile);
+            GestoreFileXML.appendValidetedXMLToTXT(xml, _xsdFile, _txtLogFile);
         }
         catch (Exception ex)
         {

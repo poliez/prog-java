@@ -9,7 +9,7 @@ import javax.xml.validation.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
-public class XMLValidator
+public class ValidazioneXML
 {
 
     public static boolean validate (File xml, File xsd)

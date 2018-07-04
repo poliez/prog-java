@@ -18,7 +18,7 @@ import javafx.scene.control.cell.*;
  *
  * Consente l'interazione tra front-end e middleware.
  * Gestisce gli eventi della UI e comunica con il back-end tramite il middleware,
- * ovvero la classe ToDoService.
+ ovvero la classe ArchivioToDos.
  * 
  * @author Paolo
  */
@@ -178,7 +178,7 @@ public class ToDosUserInterfaceController implements Initializable
              = new File("configurazione.xsd");
 
         _conf
-            = (Configurazione) XMLManager
+            = (Configurazione) GestoreFileXML
                                     .loadObjectFromValidatedXML(
                                         xmlConf,
                                         xsdConf,
@@ -209,7 +209,7 @@ public class ToDosUserInterfaceController implements Initializable
     {
         try
         {
-            ToDo prevInput = (ToDo) BinFileManager.leggiBin(_inputCachePath);
+            ToDo prevInput = (ToDo) GestoreFileBIN.leggiBin(_inputCachePath);
 
             incaricato_cb.setValue(prevInput.getIncaricato());
             compito_cb.setValue(prevInput.getCompito());
@@ -236,7 +236,7 @@ public class ToDosUserInterfaceController implements Initializable
     
     public void scriviCacheInput()
     {
-        BinFileManager
+        GestoreFileBIN
             .salvaBin(
                 getToDoFromInput(), 
                 _inputCachePath
@@ -255,7 +255,7 @@ public class ToDosUserInterfaceController implements Initializable
         
         desc_col.setCellValueFactory(new PropertyValueFactory("descrizione"));
         
-        _todos = ToDoService.caricaToDos();
+        _todos = ArchivioToDos.caricaToDos();
         
         todos_tv.setItems(_todos);
     }
@@ -267,21 +267,21 @@ public class ToDosUserInterfaceController implements Initializable
         
         ToDo toRemove = (ToDo) _todos.get(index);
         
-        boolean check = ToDoService.eliminaToDo(toRemove.getId());
+        boolean check = ArchivioToDos.eliminaToDo(toRemove.getId());
         
         if(check)
             _todos.remove(toRemove);
         
         aggiornaGrafico();
 
-        ToDoService.inviaEvento("Elimina ToDo") ;
+        ArchivioToDos.inviaEvento("Elimina ToDo") ;
     }
 
     @FXML
     private void ricercaToDo (ActionEvent event)
     {   
         _todos 
-            = ToDoService
+            = ArchivioToDos
                 .caricaToDos(
                     incaricato(),
                     compito(),
@@ -290,7 +290,7 @@ public class ToDosUserInterfaceController implements Initializable
         
         todos_tv.setItems(_todos);
         
-        ToDoService.inviaEvento("Aggiungi ToDo");
+        ArchivioToDos.inviaEvento("Ricerca ToDo");
     }
 
     @FXML
@@ -299,19 +299,18 @@ public class ToDosUserInterfaceController implements Initializable
 
         ToDo toAdd = getToDoFromInput();
         
-        ToDoService.inserisciToDo(toAdd);
+        ArchivioToDos.inserisciToDo(toAdd);
         
         // Prelevo il ToDo appena inserito dal DB per avere l'id
         todos_tv
             .getItems()
-                .add(
-                    ToDoService
+                .add(ArchivioToDos
                         .prelevaUltimoInserito()
                 );
         
         aggiornaGrafico();
         
-        ToDoService.inviaEvento("Aggiungi ToDo");
+        ArchivioToDos.inviaEvento("Aggiungi ToDo");
     }
     
     private ToDo getToDoFromInput()
@@ -334,7 +333,7 @@ public class ToDosUserInterfaceController implements Initializable
             = FXCollections.observableArrayList();
 
         Map<String, Integer> stat 
-            = ToDoService.prelevaStatistiche(_conf.getGiorniPrecedenti());
+            = ArchivioToDos.prelevaStatistiche(_conf.getGiorniPrecedenti());
 
         for(String incaricato : stat.keySet())
         {   

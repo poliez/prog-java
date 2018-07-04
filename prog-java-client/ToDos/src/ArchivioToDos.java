@@ -13,14 +13,14 @@ import todosutils.*;
 
 /**
  *
- * ToDoService implementa le CRUD su DB per la classe ToDo e si occupa di tutte
- * le interazioni con l'esterno (dal punto di vista del client di ToDos):
- * Implementa quindi il metodo per inviare i log al server e tutti i metodi che
- * interagiscono con la base di dati.
+ * ArchivioToDos implementa le CRUD su DB per la classe ToDo e si occupa di tutte
+ le interazioni con l'esterno (dal punto di vista del client di ToDos):
+ Implementa quindi il metodo per inviare i log al server e tutti i metodi che
+ interagiscono con la base di dati.
  * 
  * @author Paolo
  */
-public class ToDoService
+public class ArchivioToDos
 {
 
     private static Connection dbConnection() throws SQLException
@@ -164,15 +164,20 @@ public class ToDoService
     {
         try
         {
-            String insert = 
-                "INSERT INTO todo (incaricato, compito, data, descrizione) "
-              + "VALUES ("
-              + "'"   + todo.getIncaricato() + "'"
-              + ", '" + todo.getCompito()  + "'"
-              + ", '" + todo.getDataFormattataPerDatabase() + "'"
-              + ", '" + todo.getDescrizione() + "' )";
+
+            PreparedStatement insert = dbConnection()
+                .prepareStatement(
+                    "INSERT INTO todo (incaricato, compito, data, descrizione) "
+                    + "VALUES (?,?,?,?)"
+                );
             
-            dbStatement().execute(insert);
+            insert.setString(1, todo.getIncaricato());
+            insert.setString(2, todo.getCompito());
+            insert.setString(3, todo.getDataFormattataPerDatabase());
+            insert.setString(4, todo.getDescrizione());
+
+            
+            insert.executeUpdate();
             
             return true;
         }
@@ -317,7 +322,7 @@ public class ToDoService
                 );
             
             String xml 
-                = XMLManager
+                = GestoreFileXML
                     .toPrettyString(
                         new XStream().toXML(toSend), 
                         4

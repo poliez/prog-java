@@ -11,7 +11,7 @@ import javax.xml.xpath.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
-public class XMLManager
+public class GestoreFileXML
 {
 
     public static Object loadObjectFromFile (File file)
@@ -60,7 +60,7 @@ public class XMLManager
 
     public static Object loadObjectFromValidatedXML (File xmlFile, File xsdFile, Class cls)
     {
-        if (!XMLValidator.validate(xmlFile, xsdFile))
+        if (!ValidazioneXML.validate(xmlFile, xsdFile))
             return null;
 
         return loadObjectFromXML(xmlFile, cls);
@@ -68,7 +68,7 @@ public class XMLManager
 
     public static void appendValidetedXMLToTXT (String xml, File xsdFile, File txtFile)
     {
-        if(!XMLValidator.validate(xml, xsdFile))
+        if(!ValidazioneXML.validate(xml, xsdFile))
             return;
         
         appendXMLtoTXT(xml, xsdFile, txtFile);

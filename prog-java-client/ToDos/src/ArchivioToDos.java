@@ -124,16 +124,24 @@ public class ArchivioToDos
     public static boolean modificaToDo (ToDo todo)
     {
         try
-        {
-            String update =
-                  "UPDATE todos "
-                + "SET incaricato = '" + todo.getIncaricato() + "'"
-                + ", compito = '" + todo.getCompito() + "'"
-                + ", data = '" + todo.getDataFormattataPerDatabase() + "'"
-                + ", descrizione = '" + todo.getDescrizione() + "' "
-                + "WHERE id = '" + todo.getId() + "'";
+        {   
+            PreparedStatement update = dbConnection()
+                .prepareStatement(
+                      "UPDATE todos "
+                    + "SET incaricato = ?"
+                    + ", compito = ?"
+                    + ", data = ?"
+                    + ", descrizione = ? "
+                    + "WHERE id = ?"
+                );
             
-            dbStatement().executeUpdate(update);
+            update.setString(1, todo.getIncaricato());
+            update.setString(2, todo.getCompito());
+            update.setString(3, todo.getDataFormattataPerDatabase());
+            update.setString(4, todo.getDescrizione());
+            update.setInt(5, todo.getId());
+            
+            update.executeUpdate();
             
             return true;
         }

@@ -1,6 +1,6 @@
-<?xml version="1.0"  encoding="UTF-8"?>
+﻿<?xml version="1.0"  encoding="UTF-8"?>
 <!-- File di configurazione -->
-<Configurazione>
+<ParametriDiConfigurazione>
   <__incaricati>
     <string></string>
     <string>Mamma</string>
@@ -17,4 +17,4 @@
     <string>Fare la spesa</string>
   </__compiti>
   <__giorniPrecedenti>3</__giorniPrecedenti>
-</Configurazione>
+</ParametriDiConfigurazione>

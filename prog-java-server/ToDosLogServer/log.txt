@@ -310,3 +310,115 @@
     <data>2018-07-03 22:00:00.0 UTC</data>
     <nomeEvento>Chiusura</nomeEvento>
 </todos.Evento>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Avvio</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Aggiungi ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Termine</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Avvio</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Elimina ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Ricerca ToDo</nomeEvento>
+</EventoDiNavigazioneGUI>
+
+
+<EventoDiNavigazioneGUI>
+    <nomeApplicazione>ToDos</nomeApplicazione>
+    <indirizzoIP>POLIEZYOGA/192.168.1.105</indirizzoIP>
+    <data>2018-07-04 22:00:00.0 UTC</data>
+    <nomeEvento>Termine</nomeEvento>
+</EventoDiNavigazioneGUI>

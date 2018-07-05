@@ -7,10 +7,10 @@ public class EventoDiNavigazioneGUI
 {
     String nomeApplicazione; 
     String indirizzoIP; 
-    java.util.Date data;
+    String data;
     String nomeEvento;
     
-    public EventoDiNavigazioneGUI(String nomeApplicazione, String indirizzoIP, java.util.Date data, String nomeEvento)
+    public EventoDiNavigazioneGUI(String nomeApplicazione, String indirizzoIP, String data, String nomeEvento)
     {
         this.nomeApplicazione = nomeApplicazione;
         this.indirizzoIP = indirizzoIP;
@@ -24,17 +24,12 @@ public class EventoDiNavigazioneGUI
             "ToDos",
             InetAddress
                 .getLocalHost()
-                .toString(),
-            
-            java.sql.Date.from(
-                Instant.from(
-                    LocalDate
-                        .now()
-                        .atStartOfDay(
-                            ZoneId.systemDefault()
-                        )
-                )
-            ), 
+                    .toString(),
+            LocalDate
+                .now()
+                .atTime(
+                    LocalTime.now()
+                ).toString(), 
             evt
         );
     }

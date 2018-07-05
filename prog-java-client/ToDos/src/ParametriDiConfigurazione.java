@@ -1,19 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package todos.config;
-
 import java.io.*;
 
-/**
- *
- * Modello dei dati salvati/letti su/da file binario di configurazione.
- * 
- * @author Paolo
- */
-public class Configurazione implements Serializable
+public class ParametriDiConfigurazione implements Serializable
 {
 
     String[] _incaricati;
@@ -22,11 +9,32 @@ public class Configurazione implements Serializable
     
     int _giorniPrecedenti;
 
-    public Configurazione(String[] incaricati, String[] compiti, int giorniPrecedenti)
+    public ParametriDiConfigurazione(String[] incaricati, String[] compiti, int giorniPrecedenti)
     {
         _incaricati = incaricati;
         _compiti = compiti;
         _giorniPrecedenti = giorniPrecedenti;
+    }
+    
+    public ParametriDiConfigurazione()
+    {
+        File xmlConf
+             = new File("configurazione.xml");
+
+        File xsdConf
+             = new File("configurazione.xsd");
+
+        ParametriDiConfigurazione params
+            = (ParametriDiConfigurazione) todosutils.GestoreFileXML
+                                    .loadObjectFromValidatedXML(
+                                        xmlConf,
+                                        xsdConf,
+                                        ParametriDiConfigurazione.class
+                                    );
+        
+        _incaricati = params._incaricati;
+        _compiti = params._compiti;
+        _giorniPrecedenti = params._giorniPrecedenti;
     }
     
     public String[] getIncaricati ()

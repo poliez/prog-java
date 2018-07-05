@@ -1,8 +1,4 @@
-package todos;
-
-import todos.config.Configurazione;
 import todosutils.*;
-import java.io.*;
 import java.net.*;
 import java.time.*;
 import java.util.*;
@@ -14,15 +10,8 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 
-/**
- *
- * Consente l'interazione tra front-end e middleware.
- * Gestisce gli eventi della UI e comunica con il back-end tramite il middleware,
- ovvero la classe ArchivioToDos.
- * 
- * @author Paolo
- */
-public class ToDosUserInterfaceController implements Initializable
+
+public class ToDosGUIController implements Initializable
 {
 
     private final String _inputCachePath = "input.bin";
@@ -77,7 +66,7 @@ public class ToDosUserInterfaceController implements Initializable
     
     // <editor-fold desc="'Properties'">
     
-    private String incaricato()
+    private String leggiIncaricato()
     {
         try
         {
@@ -95,7 +84,7 @@ public class ToDosUserInterfaceController implements Initializable
         }
     }
     
-    private String compito()
+    private String leggiCompito()
     {
         try
         {
@@ -113,7 +102,7 @@ public class ToDosUserInterfaceController implements Initializable
         }
     }
     
-    private Date data()
+    private Date leggiData()
     {
         try
         {
@@ -138,26 +127,25 @@ public class ToDosUserInterfaceController implements Initializable
         }
     }
     
-    private String ora()
+    private String leggiOra()
     {
         String ora = ora_tf.getText();
         
         return ora;
     }
     
-    private String descrizione()
+    private String leggiDescrizione()
     {
         String descrizione  = descrizione_ta.getText();
         
         return descrizione;
     }
     
-    
     // </editor-fold>
     
-    private Configurazione _conf;
+    private ParametriDiConfigurazione _conf;
     
-    ObservableList<ToDo> _todos;
+    private ObservableList<ToDo> _todos;
     
     @Override
     public void initialize (URL url, ResourceBundle rb)
@@ -166,24 +154,12 @@ public class ToDosUserInterfaceController implements Initializable
         
         caricaCacheInput();
         
-        initTableView();
+        inizializzaTabella();
     }
     
     private void caricaConfigurazione()
     {
-        File xmlConf
-             = new File("configurazione.xml");
-
-        File xsdConf
-             = new File("configurazione.xsd");
-
-        _conf
-            = (Configurazione) GestoreFileXML
-                                    .loadObjectFromValidatedXML(
-                                        xmlConf,
-                                        xsdConf,
-                                        Configurazione.class
-                                    );
+        _conf = new ParametriDiConfigurazione();
 
         inizializzaChoiceBox();
         
@@ -203,6 +179,129 @@ public class ToDosUserInterfaceController implements Initializable
                     _conf.getCompiti()
             )
         );
+    }
+    
+    private void inizializzaTabella()
+    {
+        incaricato_col.setCellValueFactory(new PropertyValueFactory("incaricato"));
+        
+        compito_col.setCellValueFactory(new PropertyValueFactory("compito"));
+        
+        data_col.setCellValueFactory(new PropertyValueFactory("data"));
+        
+        ora_col.setCellValueFactory(new PropertyValueFactory("ora"));
+        
+        desc_col.setCellValueFactory(new PropertyValueFactory("descrizione"));
+        
+        _todos = ArchivioToDos.caricaToDos();
+        
+        todos_tv.setItems(_todos);
+    }
+    
+    @FXML
+    private void eliminaToDo (ActionEvent event)
+    {
+        int index = todos_tv.getSelectionModel().getFocusedIndex();
+        
+        ToDo toRemove = (ToDo) _todos.get(index);
+        
+        boolean check = ArchivioToDos.eliminaToDo(toRemove.getId());
+        
+        if(check)
+            _todos.remove(toRemove);
+        
+        aggiornaGrafico();
+
+        try
+        {
+            new EventoDiNavigazioneGUI("Elimina ToDo").invia();
+        }
+        catch (UnknownHostException ex)
+        {
+            System.err.print(ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void ricercaToDo (ActionEvent event)
+    {   
+        _todos 
+            = ArchivioToDos
+                .caricaToDos(
+                    leggiIncaricato(),
+                    leggiCompito(),
+                    leggiData()
+                );
+        
+        todos_tv.setItems(_todos);
+        
+        try
+        {
+            new EventoDiNavigazioneGUI("Ricerca ToDo").invia();
+        }
+        catch (UnknownHostException ex)
+        {
+            System.err.print(ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void aggiungiToDo (ActionEvent event)
+    {
+
+        ToDo toAdd = estraiToDoDaForm();
+        
+        ArchivioToDos.inserisciToDo(toAdd);
+        
+        // Prelevo il ToDo appena inserito dal DB per avere l'id
+        todos_tv
+            .getItems()
+                .add(ArchivioToDos
+                        .prelevaUltimoInserito()
+                );
+        
+        aggiornaGrafico();
+        
+        try
+        {
+            new EventoDiNavigazioneGUI("Aggiungi ToDo").invia();
+        }
+        catch (UnknownHostException ex)
+        {
+            System.err.print(ex.getMessage());
+        }
+    }
+    
+    private ToDo estraiToDoDaForm()
+    {
+        ToDo retVal = new ToDo();
+        
+        retVal.setIncaricato(leggiIncaricato());
+        retVal.setCompito(leggiCompito());
+        retVal.setData(leggiData());
+        retVal.setOra(leggiOra());
+        retVal.setDescrizione(leggiDescrizione());
+        
+        return retVal;
+    }
+    
+    private void aggiornaGrafico()
+    {
+
+        ObservableList<PieChart.Data> pieChartData 
+            = FXCollections.observableArrayList();
+
+        Map<String, Integer> stat 
+            = ArchivioToDos.prelevaStatistiche(_conf.getGiorniPrecedenti());
+
+        for(String incaricato : stat.keySet())
+        {   
+            pieChartData.add(
+                new PieChart.Data(incaricato, stat.get(incaricato))
+            );
+        }
+
+        todos_pie.setData(pieChartData);
     }
     
     private void caricaCacheInput()
@@ -238,110 +337,9 @@ public class ToDosUserInterfaceController implements Initializable
     {
         GestoreFileBIN
             .salvaBin(
-                getToDoFromInput(), 
+                estraiToDoDaForm(), 
                 _inputCachePath
             );
     }
     
-    private void initTableView()
-    {
-        incaricato_col.setCellValueFactory(new PropertyValueFactory("incaricato"));
-        
-        compito_col.setCellValueFactory(new PropertyValueFactory("compito"));
-        
-        data_col.setCellValueFactory(new PropertyValueFactory("data"));
-        
-        ora_col.setCellValueFactory(new PropertyValueFactory("ora"));
-        
-        desc_col.setCellValueFactory(new PropertyValueFactory("descrizione"));
-        
-        _todos = ArchivioToDos.caricaToDos();
-        
-        todos_tv.setItems(_todos);
-    }
-    
-    @FXML
-    private void eliminaToDo (ActionEvent event)
-    {
-        int index = todos_tv.getSelectionModel().getFocusedIndex();
-        
-        ToDo toRemove = (ToDo) _todos.get(index);
-        
-        boolean check = ArchivioToDos.eliminaToDo(toRemove.getId());
-        
-        if(check)
-            _todos.remove(toRemove);
-        
-        aggiornaGrafico();
-
-        ArchivioToDos.inviaEvento("Elimina ToDo") ;
-    }
-
-    @FXML
-    private void ricercaToDo (ActionEvent event)
-    {   
-        _todos 
-            = ArchivioToDos
-                .caricaToDos(
-                    incaricato(),
-                    compito(),
-                    data()
-                );
-        
-        todos_tv.setItems(_todos);
-        
-        ArchivioToDos.inviaEvento("Ricerca ToDo");
-    }
-
-    @FXML
-    private void aggiungiToDo (ActionEvent event)
-    {
-
-        ToDo toAdd = getToDoFromInput();
-        
-        ArchivioToDos.inserisciToDo(toAdd);
-        
-        // Prelevo il ToDo appena inserito dal DB per avere l'id
-        todos_tv
-            .getItems()
-                .add(ArchivioToDos
-                        .prelevaUltimoInserito()
-                );
-        
-        aggiornaGrafico();
-        
-        ArchivioToDos.inviaEvento("Aggiungi ToDo");
-    }
-    
-    private ToDo getToDoFromInput()
-    {
-        ToDo retVal = new ToDo();
-        
-        retVal.setIncaricato(incaricato());
-        retVal.setCompito(compito());
-        retVal.setData(data());
-        retVal.setOra(ora());
-        retVal.setDescrizione(descrizione());
-        
-        return retVal;
-    }
-    
-    private void aggiornaGrafico()
-    {
-
-        ObservableList<PieChart.Data> pieChartData 
-            = FXCollections.observableArrayList();
-
-        Map<String, Integer> stat 
-            = ArchivioToDos.prelevaStatistiche(_conf.getGiorniPrecedenti());
-
-        for(String incaricato : stat.keySet())
-        {   
-            pieChartData.add(
-                new PieChart.Data(incaricato, stat.get(incaricato))
-            );
-        }
-
-        todos_pie.setData(pieChartData);
-    }
 }

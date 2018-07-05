@@ -9,3 +9,13 @@
 /prog-java-utils/ToDosUtils/dist/
 /prog-java-server/ToDosLogServer/dist/
 prog-java-utils/ToDosUtils/nbproject/
+
+prog-java-server/ToDosLogServer/vpproject/
+
+prog-java-utils/ToDosUtils/vpproject/
+
+prog-java-client/ToDos/vpproject/
+
+prog-java-client/ToDos/nbproject/
+
+prog-java-server/ToDosLogServer/nbproject/

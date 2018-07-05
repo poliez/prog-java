@@ -1,12 +1,13 @@
+
+
 import java.io.*;
 import java.net.*;
-import todosutils.*;
 
 /**
  * 
  * @author Paolo
  */
-public class ToDoServerThread extends Thread
+public class LogDiNavigazioneGUIThread extends Thread
 {
 
     Socket _soc;
@@ -14,7 +15,7 @@ public class ToDoServerThread extends Thread
     File _xsdFile;
     File _txtLogFile;
 
-    public ToDoServerThread (String name, Socket soc, File xsdFile, File txtLogFile)
+    public LogDiNavigazioneGUIThread (String name, Socket soc, File xsdFile, File txtLogFile)
     {
         super(name);
 
@@ -37,7 +38,7 @@ public class ToDoServerThread extends Thread
         {   
             String xml = oin.readUTF();
             
-            GestoreFileXML.appendValidetedXMLToTXT(xml, _xsdFile, _txtLogFile);
+            todosutils.GestoreFileXML.appendValidetedXMLToTXT(xml, _xsdFile, _txtLogFile);
         }
         catch (Exception ex)
         {

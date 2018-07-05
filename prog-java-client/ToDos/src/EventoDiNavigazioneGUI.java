@@ -1,27 +1,64 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package todos;
+import java.io.*;
+import java.net.*;
+import java.time.*;
+import com.thoughtworks.xstream.*;
 
-import java.util.Date;
-/**
- * Classe da serializzare XML per inviare eventi da loggare al server.
- * @author Paolo
- */
-public class Evento
+public class EventoDiNavigazioneGUI
 {
     String nomeApplicazione; 
     String indirizzoIP; 
-    Date data; 
+    java.util.Date data;
     String nomeEvento;
     
-    public Evento(String nomeApplicazione, String indirizzoIP, Date data, String nomeEvento)
+    public EventoDiNavigazioneGUI(String nomeApplicazione, String indirizzoIP, java.util.Date data, String nomeEvento)
     {
         this.nomeApplicazione = nomeApplicazione;
         this.indirizzoIP = indirizzoIP;
         this.data = data;
         this.nomeEvento = nomeEvento;
+    }
+    
+    public EventoDiNavigazioneGUI(String evt) throws UnknownHostException
+    {
+        this(
+            "ToDos",
+            InetAddress
+                .getLocalHost()
+                .toString(),
+            
+            java.sql.Date.from(
+                Instant.from(
+                    LocalDate
+                        .now()
+                        .atStartOfDay(
+                            ZoneId.systemDefault()
+                        )
+                )
+            ), 
+            evt
+        );
+    }
+    
+    public void invia()
+    {
+        try 
+        (
+            Socket s = new java.net.Socket("localhost", 8080);
+            ObjectOutputStream oout = new ObjectOutputStream(s.getOutputStream());
+        )
+        {        
+            String xml 
+                = todosutils.GestoreFileXML
+                    .toPrettyString(
+                        new XStream().toXML(this), 
+                        4
+                    );
+            
+            oout.writeUTF(xml);
+        }
+        catch (IOException ex)
+        {
+            System.err.print(ex.getMessage());
+        }
     }
 }

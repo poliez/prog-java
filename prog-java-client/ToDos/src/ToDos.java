@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package todos;
-
 import java.io.*;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.net.*;
+import javafx.application.*;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.stage.*;
 
-/**
- *
- * @author Paolo
- */
+
 public class ToDos extends Application
 {
 
@@ -24,20 +14,27 @@ public class ToDos extends Application
     {
         try
         {
-            ArchivioToDos.inviaEvento("Avvio");
+            new EventoDiNavigazioneGUI("Avvio").invia();
             
             FXMLLoader loader = new FXMLLoader();
             
-            Parent root = loader.load(getClass().getResource("ToDosUserInterface.fxml").openStream());
+            Parent root = loader.load(getClass().getResource("ToDosGUI.fxml").openStream());
 
             Scene scene = new Scene(root);
             
             stage.setOnCloseRequest(evt -> {
                 
-                ((ToDosUserInterfaceController) loader.getController())
+                ((ToDosGUIController) loader.getController())
                     .scriviCacheInput();
                 
-                ArchivioToDos.inviaEvento("Chiusura");
+                try
+                {
+                    new EventoDiNavigazioneGUI("Termine").invia();
+                }
+                catch (UnknownHostException ex)
+                {
+                    System.err.print(ex.getMessage());
+                }
             });
             
             stage.setResizable(false);

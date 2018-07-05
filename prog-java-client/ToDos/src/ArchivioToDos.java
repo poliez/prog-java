@@ -1,25 +1,9 @@
-package todos;
-
-import com.thoughtworks.xstream.*;
-import java.io.*;
-import java.net.*;
 import java.sql.*;
-import java.sql.Date;
 import java.text.*;
-import java.time.*;
 import java.util.*;
 import javafx.collections.*;
-import todosutils.*;
 
-/**
- *
- * ArchivioToDos implementa le CRUD su DB per la classe ToDo e si occupa di tutte
- le interazioni con l'esterno (dal punto di vista del client di ToDos):
- Implementa quindi il metodo per inviare i log al server e tutti i metodi che
- interagiscono con la base di dati.
- * 
- * @author Paolo
- */
+
 public class ArchivioToDos
 {
 
@@ -49,7 +33,7 @@ public class ArchivioToDos
                             "SELECT * FROM todo WHERE eliminato = 0 AND data >= DATE(NOW())"
                     );
 
-            return getToDos(rs);
+            return prelevaToDo(rs);
         }
         catch (SQLException e)
         {
@@ -102,7 +86,7 @@ public class ArchivioToDos
                         )
                     );
             
-            return getToDos(rs);
+            return prelevaToDo(rs);
         }
         catch (SQLException e)
         {
@@ -249,7 +233,7 @@ public class ArchivioToDos
             int id = rs.getInt("id");
             String incaricato = rs.getString("incaricato");
             String compito = rs.getString("compito");
-            Date data = rs.getDate("data");
+            java.sql.Date data = rs.getDate("data");
             String descrizione = rs.getString("descrizione");
             String ora = rs.getTime("data").toLocalTime().toString();
 
@@ -276,7 +260,7 @@ public class ArchivioToDos
         return null;
     }
     
-    private static ObservableList<ToDo> getToDos (ResultSet rs) throws SQLException
+    private static ObservableList<ToDo> prelevaToDo (ResultSet rs) throws SQLException
     {
         ObservableList<ToDo> retList = FXCollections.observableArrayList();
 
@@ -285,7 +269,7 @@ public class ArchivioToDos
             int id = rs.getInt("id");
             String incaricato = rs.getString("incaricato");
             String compito = rs.getString("compito");
-            Date data = rs.getDate("data");
+            java.sql.Date data = rs.getDate("data");
             String descrizione = rs.getString("descrizione");
 
             String ora = rs.getTime("data").toLocalTime().toString();
@@ -303,36 +287,5 @@ public class ArchivioToDos
         }
 
         return retList;
-    }
-    
-    public static void inviaEvento(String evt)
-    {
-        try 
-        (
-            Socket s = new Socket("localhost", 8080);
-            ObjectOutputStream oout = new ObjectOutputStream(s.getOutputStream());
-        )
-        {
-            Evento toSend   
-                = new Evento(
-                    "ToDos",
-                    InetAddress.getLocalHost().toString(), 
-                    Date.from(Instant.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()))), 
-                    evt
-                );
-            
-            String xml 
-                = GestoreFileXML
-                    .toPrettyString(
-                        new XStream().toXML(toSend), 
-                        4
-                    );
-            
-            oout.writeUTF(xml);
-        }
-        catch (Exception ex)
-        {
-            System.err.print(ex.getMessage());
-        }
     }
 }

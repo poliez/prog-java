@@ -14,25 +14,6 @@ import org.xml.sax.*;
 public class GestoreFileXML
 {
 
-    public static Object loadObjectFromFile (File file)
-    {
-        try
-        {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            return ois.readObject();
-        }
-        catch (FileNotFoundException ex)
-        {
-            System.err.println(ex.getMessage());
-        }
-        catch (IOException | ClassNotFoundException ex)
-        {
-            System.err.println(ex.getMessage());
-        }
-
-        return null;
-    }
-
     public static Object loadObjectFromXML (File xmlFile, Class cls)
     {
         XStream str = new XStream();

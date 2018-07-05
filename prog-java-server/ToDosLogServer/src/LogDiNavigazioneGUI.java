@@ -1,11 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-/**
- *
- * @author Paolo
- */
-public class ToDosLogServer
+public class LogDiNavigazioneGUI
 {
 
     public static void main (String[] args)
@@ -22,7 +18,7 @@ public class ToDosLogServer
         {
             while (true)
             {
-                new ToDoServerThread(
+                new LogDiNavigazioneGUIThread(
                     "ToDoServerThread"+ n++, 
                     servs.accept(),
                     xsdFile,

@@ -1,16 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package todos;
+import java.util.*;
 
-import java.util.Date;
-
-/**
- * Classe base rappresentante l'oggetto fondamentale dell'applicazione, il ToDo.
- * @author Paolo
- */
 public class ToDo implements java.io.Serializable
 {
 
@@ -21,6 +10,26 @@ public class ToDo implements java.io.Serializable
     String _ora;
     String _descrizione;
 
+    public ToDo ()
+    {
+        this(0, "", "", null, "", "");
+    }
+    
+    public ToDo (int id,
+                 String incaricato,
+                 String compito,
+                 Date data,
+                 String ora,
+                 String descrizione)
+    {
+        _id = id;
+        _incaricato = incaricato;
+        _compito = compito;
+        _data = data;
+        _ora = ora;
+        _descrizione = descrizione;
+    }
+    
     // <editor-fold desc="Getters e Setters">
     
     public int getId ()
@@ -86,6 +95,7 @@ public class ToDo implements java.io.Serializable
      * si è scelto di memorizzare data e ora nello stesso attributo. 
      * Lato client è stato preferito mantenerli separati per favorire la scrittura
      * del codice.
+     * @return data formattata correttamente per l'inserimento nel db
      */
     public String getDataFormattataPerDatabase ()
     {
@@ -105,26 +115,6 @@ public class ToDo implements java.io.Serializable
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         return sdf.format(_data);
-    }
-
-    ToDo ()
-    {
-        this(0, "", "", null, "", "");
-    }
-    
-    public ToDo (int id,
-                 String incaricato,
-                 String compito,
-                 Date data,
-                 String ora,
-                 String descrizione)
-    {
-        _id = id;
-        _incaricato = incaricato;
-        _compito = compito;
-        _data = data;
-        _ora = ora;
-        _descrizione = descrizione;
     }
 
 }
